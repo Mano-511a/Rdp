@@ -1,13 +1,13 @@
 image: Visual Studio 2022
 
 init:
-  - ps: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
-  - ps: netsh advfirewall firewall add rule name="RDP" dir=in action=allow protocol=TCP localport=3389
-  - ps: net user RDP P@ssw0rd123 /add
-  - ps: net localgroup Administrators RDP /add
+- ps: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+- ps: netsh advfirewall firewall add rule name="RDP" dir=in action=allow protocol=TCP localport=3389
+- ps: net user RDP P@ssw0rd123 /add
+- ps: net localgroup Administrators RDP /add
 
 install:
-  - ps: curl -L -o cloudflared.exe https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe
-  - ps: Start-Process -FilePath ".\cloudflared.exe" -ArgumentList "tunnel --url localhost:3389" -NoNewWindow
-  - ps: Write-Host "Check cloudflare URL from logs (trycloudflare.com)" -ForegroundColor Green
-  - ps: while ($true) { Start-Sleep -Seconds 300 }
+- ps: Invoke-WebRequest -Uri "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe" -OutFile "cloudflared.exe"
+- ps: Start-Process -FilePath ".\cloudflared.exe" -ArgumentList "tunnel --url localhost:3389" -NoNewWindow
+- ps: Write-Host "RDP Address will appear in logs (look for trycloudflare.com)" -ForegroundColor Green
+- ps: while ($true) { Start-Sleep -Seconds 300 }
