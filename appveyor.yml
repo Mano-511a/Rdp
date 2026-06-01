@@ -7,9 +7,10 @@ init:
 - ps: net localgroup Administrators RDP /add
 
 install:
-- ps: Invoke-WebRequest -Uri "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe" -OutFile "cloudflared.exe"
-- ps: Start-Process -FilePath ".\cloudflared.exe" -ArgumentList "tunnel --url localhost:3389" -NoNewWindow
-- ps: Start-Sleep -Seconds 20
+- ps: Invoke-WebRequest -Uri "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip" -OutFile "ngrok.zip"
+- ps: Expand-Archive -Path "ngrok.zip" -DestinationPath "."
+- ps: Start-Process -FilePath ".\ngrok.exe" -ArgumentList "tcp 3389" -NoNewWindow
+- ps: Start-Sleep -Seconds 10
 - ps: |
     $response = Invoke-RestMethod -Uri "http://localhost:4040/api/tunnels"
     $url = $response.tunnels[0].public_url
